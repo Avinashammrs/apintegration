@@ -1,14 +1,14 @@
 "use client";
-import { dashboardSelector, getCandidateStatusList } from "@/store/reducers/dashboard";
 import Link from "next/link";
 import { useEffect ,useState} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/reducers/type";
 
 
 function CandidateStatus() {
 
 
-  const { meetings } = useSelector((state) => state.meetingInfo);
+  const { meetings } = useSelector((state:RootState) => state.meetingInfo);
 
   const[candidate,setCandidate] = useState([]);
 
@@ -17,7 +17,7 @@ function CandidateStatus() {
   },[meetings]);
 
   function transformMeetings(data: any) {
-    return data.map(data => ({
+    return data.map((data: any )=> ({
         jobID: data.job_id ? data.job_id.id : null,
         name: data.user_det && data.user_det.candidate ?
             `${data.user_det.candidate.candidate_firstName} ${data.user_det.candidate.candidate_lastName}` : null,
@@ -51,7 +51,7 @@ function CandidateStatus() {
             </tr>
           </thead>
           <tbody>
-            {candidate?.map((list,index) => (
+            {candidate?.map((list:any,index) => (
               <tr key={"card"+index}>
                 <td>{list?.jobID}</td>
                 <td>{list?.name}</td>

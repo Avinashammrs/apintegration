@@ -2,31 +2,12 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import {
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-  PromiseLikeOfReactNode,
-} from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
-function PostedJobsTop(props: {
-  titleName:
-    | string
-    | number
-    | boolean
-    | ReactElement<any, string | JSXElementConstructor<any>>
-    | Iterable<ReactNode>
-    | ReactPortal
-    | PromiseLikeOfReactNode
-    | null
-    | undefined;
-}) {
+function PostedJobsTop(props: any ) {
   // filter btn
   const [filterBtn, setfilterBtn] = React.useState<null | HTMLElement>(null);
   const open = Boolean(filterBtn);

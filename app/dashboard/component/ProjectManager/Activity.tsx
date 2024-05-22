@@ -3,8 +3,9 @@ import React from 'react';
 import Link from 'next/link';
 import { useEffect ,useState} from "react";
 import {  useSelector } from "react-redux";
+import { RootState } from "@/store/reducers/type";
 
-function ActivityItem(props) {
+function ActivityItem(props:any) {
     return (
         <div className="row mt-4 align-items-center ">
             <div className="col-3 pe-0">
@@ -21,11 +22,11 @@ function ActivityItem(props) {
 }
 
 export default function Activity() {
-const { meetings } = useSelector((state) => state.meetingInfo);
+const { meetings } = useSelector((state: RootState) => state.meetingInfo);
 
   const[candidate,setCandidate] = useState([]);
 
-  function extractCandidateDetails(data) {
+  function extractCandidateDetails(data: any) {
     return data.map((data: any,index:number) => ({
         candidate: data.user_det ? data.user_det.candidate ?  data.user_det.candidate.candidate_firstName + " "+  data.user_det.candidate.candidate_lastName: null :null,
         interviewer: data.user_det ? data.user_det.handled_by.username : null,
@@ -48,7 +49,7 @@ const { meetings } = useSelector((state) => state.meetingInfo);
                 </Link>
             </div>
 
-            {candidate.map((data, index) => (
+            {candidate.map((data: any, index) => (
                 <ActivityItem key={index} {...data} />
             ))}
         </div>

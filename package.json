@@ -51,16 +51,18 @@
     "sass": "^1.72.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "20.12.12",
     "@types/react": "18.3.2",
+    "@types/react-big-calendar": "^1.8.9",
     "@types/react-date-range": "^1.4.9",
     "@types/react-dom": "^18",
     "@types/react-gauge-chart": "^0.4.3",
     "@types/react-modal": "^3.16.3",
+    "@types/recharts": "^1.8.29",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.1",
-    "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "5.4.5"
   }

@@ -2,28 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "@/store/reducers/type";
 
-// import * as React from "react";
-// import { LineChart } from "@mui/x-charts/LineChart";
-
-// function GraphProject() {
-//   return (
-//     <LineChart
-//       xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-//       series={[
-//         {
-//           data: [2, 5.5, 2, 8.5, 1.5, 5],
-//           area: true,
-//           color: "#0B74AD",
-//         },
-//       ]}
-//       // width={800}
-//       height={320}
-//     />
-//   );
-// }
-
-// export default GraphProject;
 import {
   LineChart,
   Line,
@@ -37,17 +17,13 @@ import {
 function GraphProject() {
 
 const [data,setData] = useState([]);
-const { meetings } = useSelector((state) => state.meetingInfo);
+const { meetings } = useSelector((state:RootState) => state.meetingInfo);
 
-useEffect(() =>{
-  setData(transformData(meetings));
+const transformData = (apiResponse:any) => {
+  const dateCounts:any = {};
+  
 
-},[meetings])
-
-const transformData = (apiResponse) => {
-  const dateCounts = {};
-
-  apiResponse.forEach(meeting => {
+  apiResponse.forEach((meeting:any )=> {
       const date = new Date(meeting.start).toISOString().split('T')[0]; 
 
       if (dateCounts[date]) {
@@ -55,15 +31,24 @@ const transformData = (apiResponse) => {
       } else {
           dateCounts[date] = 1;
       }
-  });
+  }
+  );
+  const result:any = Object.keys(dateCounts).map(date => {
+    const formattedDate = new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return { date: formattedDate, Interviews: dateCounts[date] };
+});
 
-  const result = Object.keys(dateCounts).map(date => {
-      const formattedDate = new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      return { date: formattedDate, Interviews: dateCounts[date] };
-  });
-
-  return result;
+return result;
 };
+
+useEffect(() =>{
+  setData(transformData(meetings));
+
+},[meetings])
+
+
+
+  
 
   // const data = [
   //   { date: "Feb 1", Interviews: 2 },

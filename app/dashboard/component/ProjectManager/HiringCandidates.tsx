@@ -2,8 +2,9 @@ import React from "react";
 import Link from "next/link";
 import { useEffect ,useState} from "react";
 import {  useSelector } from "react-redux";
+import { RootState } from "@/store/reducers/type";
 
-function AppointmentItem(props) {
+function AppointmentItem(props:any) {
   return (
     <div className="row mt-4 align-items-center ">
       <div className="col-3 pe-0">
@@ -38,11 +39,11 @@ function AppointmentItem(props) {
 
 export default function HiringCandidates() {
   
-  const { meetings } = useSelector((state) => state.meetingInfo);
+  const { meetings } = useSelector((state:RootState) => state.meetingInfo);
 
   const[recruiters,setRecruiters] = useState([]);
 
-  function extractHiringDetails(data) {
+  function extractHiringDetails(data:any) {
     return data.map((data: any,index:number) => ({
         hiringManagerName: data.user_det ? data.user_det.handled_by.username : null,
         createdBy: data.job_id ? data.job_id.jobRequest_createdBy.username : null,
@@ -68,7 +69,7 @@ export default function HiringCandidates() {
         </Link>
       </div>
 
-      {recruiters.map((recruiter, index) => (
+      {recruiters.map((recruiter:any, index) => (
         <AppointmentItem key={index} {...recruiter} />
       ))}
     </div>

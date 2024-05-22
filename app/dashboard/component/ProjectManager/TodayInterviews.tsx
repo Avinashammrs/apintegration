@@ -27,7 +27,7 @@ function TodayInterviews() {
     return (
         <>
         <div className="col-lg-8 me-3">
-            {meetings.map((meeting, index) => (
+            {meetings.map((meeting:any, index) => (
                 <div key={index} className="row mx-0 border">
                     <div className="col-lg-5 px-0 col-5">
                         <div className="border-end w-100 pt-3 text-center">

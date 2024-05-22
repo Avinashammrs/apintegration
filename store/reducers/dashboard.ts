@@ -1,151 +1,65 @@
 "use client";
 import { ACCESS_TOKEN } from "@/constants/ENVIRONMENT_VARIABLES";
-import {
-  GET_ACTIVITIES_API,
-  GET_CANDIDATE_STATUS_API,
-  GET_HIRED_API,
-  GET_INTERVIEW_AND_HIRED_DETAILS_API,
-  GET_POSTED_JOB_Active_LISTS_API,
-  GET_POSTED_JOB_LISTS_API,
-  GET_TICKET_LIST_API,
-  GET_TODAY_MEETING_DETAILS_API,
-  GET_UPCOMINGS_API,
-  INVENTORY_ASSETS_API,
-  LOGIN_API,
-  LOGOUT_API,
-  NOTIFICATIONS_API,
-  USER_ACCOUNT_MANAGEMENT_ACCOUNT_API,
-  GET_MEETINGS_DETAILS_API
-} from "@/utils/API";
+import {LOGIN_API } from "@/utils/API";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import Cookies from "js-cookie"; // Import the js-cookie library
 
 
+interface LoginResponse {
+  access_token: string;
+  user_email: string;
+  user_id: string;
+  refresh_token: string;
+}
+
 // Helper function to handle common async thunk logic
-const createAsyncThunkHandler = (apiFunction, propName, onLoginSuccess?) =>
-  createAsyncThunk(`dashboard/${propName}`, async (data: any) => {
-    try {
-      // Call the API function with provided data
-      let response;
-      if (data) {
-        response = await apiFunction(data);
-      } else {
-        response = await apiFunction();
-      }
+const createAsyncThunkHandler = <Returned, ThunkArg>(
+  apiFunction: (data: ThunkArg) => Promise<Returned>,
+  propName: string,
+  onLoginSuccess?: (response: Returned) => void
+) =>
+  createAsyncThunk<Returned, ThunkArg>(
+    `dashboard/${propName}`,
+    async (data, thunkAPI) => {
+      try {
+        const response = await apiFunction(data);
 
-      // If there's a login success callback, call it with the response
-      if (onLoginSuccess && propName === "login") {
-        onLoginSuccess(response);
-      }
+        // If there's a login success callback, call it with the response
+        if (onLoginSuccess && propName === "login") {
+          onLoginSuccess(response);
+        }
 
-      return response;
-    } catch (error) {
-      // Handle error
-      console.error(`${propName} failed:`, error);
-      throw error;
+        return response;
+      } catch (error: any) {
+        console.error(`${propName} failed:`, error);
+        return thunkAPI.rejectWithValue(error.message);
+      }
     }
-  });
-// Define async thunks using the helper function
-export const getCandidateStatusList = createAsyncThunkHandler(
-  GET_CANDIDATE_STATUS_API,
-  "candidate_status_list"
-);
-
-export const getInterviewAndHiredDetails = createAsyncThunkHandler(
-  GET_INTERVIEW_AND_HIRED_DETAILS_API,
-  "interview_and_hired_details"
-);
-
-export const getPostedJobList = createAsyncThunkHandler(
-  GET_POSTED_JOB_LISTS_API,
-  "posted_job_list"
-);
-
-export const getPostedJobActiveList = createAsyncThunkHandler(
-  GET_POSTED_JOB_Active_LISTS_API,
-  "posted_job_active_list"
-);
-
-export const getTodayMeetingDetailsList = createAsyncThunkHandler(
-  GET_TODAY_MEETING_DETAILS_API,
-  "today_meeting_details_list"
-);
-
-export const getActivities = createAsyncThunkHandler(
-  GET_ACTIVITIES_API,
-  "activities_list"
-);
-
-export const getUpcomings = createAsyncThunkHandler(
-  GET_UPCOMINGS_API,
-  "upcomings_list"
-);
-
-export const getHirings = createAsyncThunkHandler(
-  GET_HIRED_API,
-  "hirings_list"
-);
-export const userlogin = createAsyncThunkHandler(
-  LOGIN_API,
-  "login",
-  (response) => {
-    // Assuming response contains session information such as user data, access token, etc.
-    const { access_token, user_email, user_id, refresh_token } = response;
-    // Store user data and access token in cookies
-    console.log("Cookei-->",Cookies);
-    Cookies.set(
-      ACCESS_TOKEN,
-      JSON.stringify({ access_token, user_email, user_id, refresh_token })
-    );
-    console.log("Cookei-->",Cookies);
-
-    window.location = '/';
+  );
 
 
-  }
-);
+  export const userlogin = createAsyncThunkHandler<LoginResponse, Record<string, any>>(
+    LOGIN_API,
+    "login",
+    (response) => {
+      const { access_token, user_email, user_id, refresh_token } = response;
+      const accessTokenName: string = ACCESS_TOKEN || '';
+      Cookies.set(
+        accessTokenName,
+        JSON.stringify({ access_token, user_email, user_id, refresh_token })
+      );
+      window.location.href = '/';
+    }
+  );
+  
 
-export const getTicketList = createAsyncThunkHandler(
-  GET_TICKET_LIST_API,
-  "ticket_List"
-);
-
-export const userLogout = createAsyncThunkHandler(LOGOUT_API, "logout");
-
-export const userAccountManagementAccount = createAsyncThunkHandler(
-  USER_ACCOUNT_MANAGEMENT_ACCOUNT_API,
-  "user_account_management"
-);
-
-export const inventoryAssets = createAsyncThunkHandler(
-  INVENTORY_ASSETS_API,
-  "inventory_Assets"
-);
-
-export const getNotifications = createAsyncThunkHandler(
-  NOTIFICATIONS_API,
-  "notification_list"
-);
 const dashboardSlice = createSlice({
   name: "dashboard",
   initialState: {
-    candidate_status_list: [],
-    interview_and_hired_details: {},
-    posted_job_list: [],
-    posted_job_active_list: [],
-    today_meeting_details_list: [],
-    activities_list: [],
-    upcomings_list: [],
-    hirings_list: [],
-    ticket_List: [],
-    inventory_Assets: [],
-    notification_list: [],
     login: {},
     logout: {},
-    user_account_management: {},
     loading: false,
-    inactiveJobsData:[],
     loginDetails:{}
   },
   reducers: {},
@@ -163,7 +77,7 @@ const dashboardSlice = createSlice({
         (action) =>
           action.type.startsWith("dashboard/") &&
           action.type.endsWith("/fulfilled"),
-        (state, action) => {
+        (state:any, action:any) => {
           state.loading = false;
           const propName = action.type.split("/")[1]; // Extract property name from action type
           state[propName] = action.payload;
@@ -180,5 +94,5 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const dashboardSelector = (state: any) => state.dashboard;
+export const dashboardSelector = (state:any) => state.dashboard;
 export default dashboardSlice.reducer;

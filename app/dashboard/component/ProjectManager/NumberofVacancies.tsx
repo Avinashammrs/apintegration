@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "@/store/reducers/type";
 
 
 
@@ -11,13 +12,13 @@ function NumberofVacancies() {
   const [totalVacancies, setTotalVacancies] = useState(0);
 
 
-  const { meetings } = useSelector((state) => state.meetingInfo);
+  const { meetings } = useSelector((state:RootState) => state.meetingInfo);
 
-  const countJobTitles = (apiResponse) => {
-    const jobDetails = {};
+  const countJobTitles = (apiResponse:any) => {
+    const jobDetails : any= {};
     let totalCount = 0;
     if (apiResponse) {
-      apiResponse.forEach((meeting) => {
+      apiResponse.forEach((meeting:any) => {
         if (meeting.job_id && meeting.job_id.jobRequest_Title) {
           const jobTitle = meeting.job_id.jobRequest_Title;
           const jobVacancy = meeting.job_id.jobRequest_TotalVacancy || 0;

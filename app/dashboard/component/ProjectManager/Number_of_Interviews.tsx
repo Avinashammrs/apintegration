@@ -1,13 +1,13 @@
 import { useSelector } from "react-redux";
+import { RootState } from "@/store/reducers/type";
 
 function Number_of_Interviews() {
-    const dashboardData = useSelector(state => state.dashboard)
-    const { meetings } = useSelector((state) => state.meetingInfo);
+    const { meetings } = useSelector((state:RootState) => state.meetingInfo);
 
-    const countPassedInterviews = (apiResponse) => {
+    const countPassedInterviews = (apiResponse:any) => {
         let passedCount = 0;
     
-        apiResponse.forEach(meeting => {
+        apiResponse.forEach((meeting:any) => {
             if (meeting.status === "Passed") {
                 passedCount++;
             }

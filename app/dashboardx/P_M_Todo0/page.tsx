@@ -99,36 +99,36 @@ export default function P_M_Todo0() {
 
   };
 
-  const handleSelect = (event: any, e) => {
+  const handleSelect = (event: any, e:any) => {
     const { start, end } = event;
     setActiveEventModal(event);
     setPosition({ x: e.clientX, y: e.clientY });
   };
 
-  const EventDetailModal = () => {
-    return (
-      <>
-        {activeEventModal?.title && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              backgroundColor: "white",
-              border: "1px solid black",
-              padding: "10px",
-              color: "blue",
-              height: "100%",
-              zIndex: 1000,
-            }}
-          >
-            {activeEventModal?.title}
-          </div>
-        )}
-      </>
-    );
-  };
+  // const EventDetailModal = () => {
+  //   return (
+  //     <>
+  //       {activeEventModal?.title && (
+  //         <div
+  //           style={{
+  //             position: "absolute",
+  //             top: 0,
+  //             left: 0,
+  //             width: "100%",
+  //             backgroundColor: "white",
+  //             border: "1px solid black",
+  //             padding: "10px",
+  //             color: "blue",
+  //             height: "100%",
+  //             zIndex: 1000,
+  //           }}
+  //         >
+  //           {activeEventModal?.title}
+  //         </div>
+  //       )}
+  //     </>
+  //   );
+  // };
 
   // Custom Event Component
   const CustomEvent = ({ event }: any) => {

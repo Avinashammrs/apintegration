@@ -5,6 +5,7 @@ import { dashboardSelector } from "@/store/reducers/dashboard";
 import { useEffect ,useState} from "react";
 import {  useSelector } from "react-redux";
 import moment from "moment";
+import { RootState } from "@/store/reducers/type";
 
 function AppointmentItem({ date, title, creator, time, colorName,...props }: any) {
   return (
@@ -38,11 +39,11 @@ function AppointmentItem({ date, title, creator, time, colorName,...props }: any
 
 export default function AppointmentsPage() {
 
-  const { meetings } = useSelector((state) => state.meetingInfo);
+  const { meetings } = useSelector((state: RootState) => state.meetingInfo);
 
   const[upComingMeetings,setUpComingMeetings] = useState([]);
 
-  function extractupComingMeetingsDetails(data) {
+  function extractupComingMeetingsDetails(data:any) {
     return data.map((data: any,index:number) => ({
         start_date: data.start ? data.start : null,
         interviewer: data.user_det ? data.user_det.handled_by.username : null,
@@ -63,7 +64,7 @@ export default function AppointmentsPage() {
         </Link>
       </div>
 
-      {upComingMeetings?.map((appointment, index) => (
+      {upComingMeetings?.map((appointment:any, index) => (
         <AppointmentItem key={index} {...appointment} />
       ))}
     </div>
